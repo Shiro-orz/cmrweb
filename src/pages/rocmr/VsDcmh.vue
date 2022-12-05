@@ -65,6 +65,8 @@
 
 import { defineComponent, reactive, ref } from "vue";
 import EchartLine from "../../components/EchartLine.vue";
+import {postdata} from '../../utils/rocmr'
+
 
 const resoption = ref({
   xAxis: {
@@ -121,6 +123,12 @@ export default defineComponent({
       }
       console.log(models);
       console.log(valuer.value)
+      postdata({
+        A: 'test for api'
+      }).then(res => {
+        console.log('back from api:')
+        console.log(res)
+      })
       setTimeout(() => {
         iconLoading.value = false;
       }, 1000);

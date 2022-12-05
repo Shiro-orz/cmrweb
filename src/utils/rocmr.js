@@ -1,8 +1,11 @@
 import api from './request.js'
 
 export const postdata = (params) => api({
-    url: '',
+    url: '/test',
     method: 'post',
-    params: params,
-    baseURL: ''
+    data: params,
+    baseURL: 'http://127.0.0.1:5000'
 })
+
+
+// export const postdata = (params) => 
