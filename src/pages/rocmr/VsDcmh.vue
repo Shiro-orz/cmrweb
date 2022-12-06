@@ -2,25 +2,25 @@
   <div :style="{ width: '100%', height: '100%' }">
     <div>
       <a-divider orientation="left">Choose Model</a-divider>
-      <a-checkbox-group v-model:value="valuec" style="width: 100%">
+      <a-checkbox-group v-model:value="models" style="width: 100%">
         <a-row>
           <a-col :span="5">
-            <a-checkbox value="A">DCMH</a-checkbox>
+            <a-checkbox value="dcmh">DCMH</a-checkbox>
           </a-col>
           <a-col :span="4">
-            <a-checkbox value="B">DCMH+V</a-checkbox>
+            <a-checkbox value="dcmh_v">DCMH+V</a-checkbox>
           </a-col>
           <a-col :span="4">
-            <a-checkbox value="C">DCMH+T</a-checkbox>
+            <a-checkbox value="dcmh_t">DCMH+T</a-checkbox>
           </a-col>
           <a-col :span="4">
-            <a-checkbox value="D">DCMH+VT</a-checkbox>
+            <a-checkbox value="dcmh_vt">DCMH+VT</a-checkbox>
           </a-col>
         </a-row>
       </a-checkbox-group>
       <a-divider orientation="left">Choose Curve</a-divider>
       <a-radio-group
-        v-model:value="valuer"
+        v-model:value="curve"
         name="radioGroup"
         style="width: 100%"
       >
@@ -109,33 +109,34 @@ export default defineComponent({
   setup() {
     //const optionss = ref({A:'111'})
     const usrname = "shiro";
-    console.log(resoption);
+    // console.log(resoption);
     const iconLoading = ref(false);
-    const valuec = ref([]);
-    const valuer = ref("1")
+    const models = ref([]);
+    const curve = ref("1")
     const enterIconLoading = () => {
       iconLoading.value = {
         delay: 100,
       };
-      var models = { A: false, B: false, C: false, D: false };
-      for (var key in valuec.value) {
-        models[valuec.value[key]] = true;
-      }
-      console.log(models);
-      console.log(valuer.value)
+      console.log(models)
+    //   var models = { A: false, B: false, C: false, D: false };
+    //   for (var key in valuec.value) {
+    //     models[valuec.value[key]] = true;
+    //   }
+    //   console.log(models);
+    //   console.log(curve.value)
       postdata({
         A: 'test for api'
       }).then(res => {
         console.log('back from api:')
-        console.log(res)
+        console.log(res.data)
       })
       setTimeout(() => {
         iconLoading.value = false;
       }, 1000);
     };
     return {
-      valuec,
-      valuer,
+      models,
+      curve,
       iconLoading,
       enterIconLoading,
       usrname,
