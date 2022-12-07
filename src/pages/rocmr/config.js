@@ -1,14 +1,18 @@
 var DefaultOption = {
     title: {
-      text: ''
+      text: '',
+      top: 0
     },
     tooltip: {
       trigger: 'axis'
     },
     legend: {
-      data: []
+      data: [],
+      top: 24,
+      symbol: 'none',
     },
     grid: {
+      top: '20%',
       left: '3%',
       right: '4%',
       bottom: '3%',
@@ -46,6 +50,13 @@ const colors = {
     dcmh_vt: '#ee6666'
 }
 
+const dicts = {
+    dcmh: 'a_dcmh',
+    dcmh_v: 'a_dcmh_v',
+    dcmh_t: 'a_dcmh_t',
+    dcmh_vt: 'a_dcmh_vt'
+}
+
 const tasks = ['it', 'ti', 'tt', 'ii']
 // const samples = ['norm', 'adv']
 const titles = {
@@ -55,10 +66,10 @@ const titles = {
     tt: 'Text to Text'
 }
 
-function SetSerie(modelname, data, linestyle) {
+function SetSerie(modelname, data, linestyle, color) {
     let serie = JSON.parse(JSON.stringify(DefaultSerie)) 
     serie.name = modelname
-    serie.color = colors[modelname]
+    serie.color = colors[color]
     serie.data = data
     serie.lineStyle.type = linestyle
     return serie
@@ -66,16 +77,19 @@ function SetSerie(modelname, data, linestyle) {
 
 function SetSingleOption(models, task, datas){
     let option = JSON.parse(JSON.stringify(DefaultOption))
-    option.title.text = titles[task] 
-    option.legend = models
+    let ms = JSON.parse(JSON.stringify(models))
+    option.title.text = titles[task]
+    //option.legend.data = models 
     var series = []
     var i
     for (i = 0; i < models.length; i++){
-        let norm_line = SetSerie(models[i], datas[task]['norm'][models[i]], 'solid')
-        //let adv_line = SetSerie(models[i], datas[task]['adv'][models[i]], 'dashed')
+        let norm_line = SetSerie(models[i], datas[task]['norm'][models[i]], 'solid', models[i])
         series.push(norm_line)
-        //series.push(adv_line)
+        ms.push(dicts[models[i]])
+        let adv_line = SetSerie(dicts[models[i]], datas[task]['adv'][models[i]], 'dashed', models[i])
+        series.push(adv_line)
     }
+    option.legend.data = ms
     option.series = series
     return option 
 }
@@ -90,4 +104,4 @@ function SetOption(models,datas){
     return options 
 }
 
-export {SetOption, DefaultOption}
+export {SetOption, DefaultOption, tasks}

@@ -25,9 +25,11 @@ export default defineComponent({
     //     //     }
     //     },
     setup(props) {
+        console.log(props)
         var op = toRefs(props)
         var domID = op.domID.value
         var option = op.options
+        console.log(option)
         onMounted(() => {
             var chartDom = document.getElementById(domID)
             //const chartDom = ref("myEcharts")
@@ -51,13 +53,19 @@ export default defineComponent({
     //   }
     // }
         watch(
-            props,
+            props.options,
             () => {
-                console.log('watch ...')
-                console.log(toRaw(props.options))
+                console.log(domID)
+                console.log(toRaw(props).options)
+                var chartDom = document.getElementById(domID)
+                //const chartDom = ref("myEcharts")
+                myChart = echarts.init(chartDom)// console.log('watch ...')
+                myChart.clear()
+                console.log(myChart)
+
                 if (myChart) {
                     console.log('渲染')
-                    myChart.setOption(props.options)
+                    myChart.setOption(toRefs(props).options.value)
                 }
             },
             {deep: true}

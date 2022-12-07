@@ -26,10 +26,10 @@
       >
         <a-row>
           <a-col :span="5">
-            <a-radio value="1">PR</a-radio>
+            <a-radio value="pr">PR</a-radio>
           </a-col>
           <a-col :span="5">
-            <a-radio value="2">Precision1000</a-radio>
+            <a-radio value="pr1000">Precision1000</a-radio>
           </a-col>
           <a-col :span="10">
             <a-button
@@ -45,15 +45,20 @@
     </div>
     <div>
       <a-divider orientation="left">Result</a-divider>
-      <a-row :gutter="[0, 0]" :style="{ width: '100%', height: '300px' }">
-      <EchartLine domID="jjj1" :usrname="usrname" :options="resoption"></EchartLine>
-        </a-row> 
-      <a-row :gutter="[0, 0]" justify="center" :style="{ width: '100%', height: '350px' }"  >
+      <a-row :gutter="[0, 0]" justify='center' :style="{ width: '100%', height: '350px' }">
         <a-col :span="11">
-          <EchartLine domID="jjj2" :usrname="usrname" :options="itoption"></EchartLine>
+          <EchartLine domID="it" :usrname="usrname" :options="itoption"></EchartLine>
         </a-col>
         <a-col :span="11">
-          <EchartLine domID="jjj3" :usrname="usrname" :options="resoption"></EchartLine>
+          <EchartLine domID="ti" :usrname="usrname" :options="tioption"></EchartLine>
+        </a-col>
+    </a-row> 
+      <a-row :gutter="[0, 0]" justify="center" :style="{ width: '100%', height: '350px' }"  >
+        <a-col :span="11">
+          <EchartLine domID="ii" :usrname="usrname" :options="iioption"></EchartLine>
+        </a-col>
+        <a-col :span="11">
+          <EchartLine domID="tt" :usrname="usrname" :options="ttoption"></EchartLine>
         </a-col>
       </a-row>
     </div>
@@ -66,10 +71,10 @@
 import { toRefs, defineComponent, reactive, ref, toRaw } from "vue";
 import EchartLine from "../../components/EchartLine.vue";
 import {postdata} from '../../utils/rocmr'
-import {SetOption, DefaultOption} from './config'
+import {SetOption, DefaultOption, tasks} from './config'
 
 
-const resoption = ref({
+const resoption = reactive({
   xAxis: {
     type: "category",
     data: [
@@ -102,6 +107,12 @@ const resoption = ref({
   ],
 });
 
+function updateoption(src, tar){
+    src.title.text = tar.title.text
+    src.series = tar.series
+    src.legend.data = tar.legend.data 
+}
+
 export default defineComponent({
   components: {
     EchartLine,
@@ -112,32 +123,66 @@ export default defineComponent({
     const usrname = "shiro";
     const iconLoading = ref(false);
     const models = ref(['dcmh']);
-    const curve = ref("1")
-    let itoption = reactive({})
-    const enterIconLoading = () => {
-      iconLoading.value = {
-        delay: 100,
-      };
+    const curve = ref("pr")
+    var postmodels = ['dcmh']
+    var options
 
-      postdata({
-        A: 'test for api'
+    let itoption = reactive(JSON.parse(JSON.stringify(DefaultOption)))
+    let tioption = reactive(JSON.parse(JSON.stringify(DefaultOption)))
+    let iioption = reactive(JSON.parse(JSON.stringify(DefaultOption)))
+    let ttoption = reactive(JSON.parse(JSON.stringify(DefaultOption)))
+
+function dopost(){
+    postdata({
+        type: curve.value
       }).then(res => {
 
-        var postmodels = []
+        postmodels = []
         for (var key in models.value) {
             postmodels.push(models.value[key]);
         } 
 
-        let options = SetOption(postmodels, res.data)
-
-        itoption = options['it']
-        console.log(options['it'])
-        // itoption.legend = options['it'].legend
+        options = SetOption(postmodels, res.data)
+        updateoption(itoption, options['it'])
+        updateoption(tioption, options['ti'])
+        updateoption(iioption, options['ii'])
+        updateoption(ttoption, options['tt'])
+        // itoption.title.text = options['it'].title.text
         // itoption.series = options['it'].series
-        // itoption.title = options['it'].title
-        console.log(resoption)
+        // itoption.legend.data = options['it'].legend.data
+        console.log('check back ...')
         console.log(toRaw(itoption))
+        console.log(toRaw(resoption))
       })
+}
+    dopost()
+
+    const enterIconLoading = () => {
+      iconLoading.value = {
+        delay: 100,
+      };
+      dopost()
+    //   postdata({
+    //     A: 'test for api'
+    //   }).then(res => {
+
+    //     postmodels = []
+    //     for (var key in models.value) {
+    //         postmodels.push(models.value[key]);
+    //     } 
+
+    //     options = SetOption(postmodels, res.data)
+    //     updateoption(itoption, options['it'])
+    //     updateoption(tioption, options['ti'])
+    //     updateoption(iioption, options['ii'])
+    //     updateoption(ttoption, options['tt'])
+    //     // itoption.title.text = options['it'].title.text
+    //     // itoption.series = options['it'].series
+    //     // itoption.legend.data = options['it'].legend.data
+    //     console.log('check back ...')
+    //     console.log(toRaw(itoption))
+    //     console.log(toRaw(resoption))
+    //   })
       setTimeout(() => {
         iconLoading.value = false;
       }, 1000);
@@ -149,7 +194,10 @@ export default defineComponent({
       enterIconLoading,
       usrname,
       resoption,
-      itoption
+      itoption,
+      tioption,
+      iioption,
+      ttoption
     };
   },
 });

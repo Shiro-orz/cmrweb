@@ -12,7 +12,7 @@ api.interceptors.request.use(config => {
 }
 
 api.interceptors.response.use(res => {
-    console.log(res)
+    //console.log(res)
     return Promise.resolve(res)
 }), err => {
     Promise.reject(err)
