@@ -4,7 +4,7 @@
 
 <script>
 /* eslint-disable */
-import { object, defineComponent, onUnmounted, onMounted, defineProps, ref, toRefs, reactive } from 'vue';
+import { watch, object, defineComponent, onUnmounted, onMounted, defineProps, ref, toRefs, reactive, toRaw } from 'vue';
 import * as echarts from 'echarts'
 import { string } from '_vue-types@3.0.2@vue-types';
 //import { object } from '_vue-types@3.0.2@vue-types';
@@ -25,31 +25,22 @@ export default defineComponent({
     //     //     }
     //     },
     setup(props) {
-        console.log(props)
         var op = toRefs(props)
         var domID = op.domID.value
-    
+        var option = op.options
         onMounted(() => {
-            console.log("111111")
-            console.log(props)
-            console.log(op.options)
-            /// 声明定义一下echart
-            // if (myChart != null && myChart != "" && myChart != undefined) {
-            //     myChart.dispose();
-            // }
             var chartDom = document.getElementById(domID)
             //const chartDom = ref("myEcharts")
             myChart = echarts.init(chartDom)
-
-            myChart.setOption(op.options.value)
+            myChart.setOption(option.value)
         //     window.onresize = function () {
         //     myChart.resize()
         // }
         });
 
-        onUnmounted(() => {
-        myChart.dispose;
-        }); 
+        // onUnmounted(() => {
+        // myChart.dispose;
+        // }); 
 	
     // 基础配置一下Echarts
     // function initChart() {
@@ -59,8 +50,19 @@ export default defineComponent({
     //     myChart.resize()
     //   }
     // }
-
-    // watch(options,(newOptions)=>{
+        watch(
+            props,
+            () => {
+                console.log('watch ...')
+                console.log(toRaw(props.options))
+                if (myChart) {
+                    console.log('渲染')
+                    myChart.setOption(props.options)
+                }
+            },
+            {deep: true}
+        )
+    // watch(option,(newOptions)=>{
     //     myChart.setOption(newOptions)
     // },
     // {deep:true}

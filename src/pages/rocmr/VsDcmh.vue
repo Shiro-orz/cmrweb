@@ -50,7 +50,7 @@
         </a-row> 
       <a-row :gutter="[0, 0]" justify="center" :style="{ width: '100%', height: '350px' }"  >
         <a-col :span="11">
-          <EchartLine domID="jjj2" :usrname="usrname" :options="resoption"></EchartLine>
+          <EchartLine domID="jjj2" :usrname="usrname" :options="itoption"></EchartLine>
         </a-col>
         <a-col :span="11">
           <EchartLine domID="jjj3" :usrname="usrname" :options="resoption"></EchartLine>
@@ -63,9 +63,10 @@
 <script>
 /* eslint-disable */
 
-import { defineComponent, reactive, ref } from "vue";
+import { toRefs, defineComponent, reactive, ref, toRaw } from "vue";
 import EchartLine from "../../components/EchartLine.vue";
 import {postdata} from '../../utils/rocmr'
+import {SetOption, DefaultOption} from './config'
 
 
 const resoption = ref({
@@ -107,28 +108,35 @@ export default defineComponent({
   },
 
   setup() {
-    //const optionss = ref({A:'111'})
+
     const usrname = "shiro";
-    // console.log(resoption);
     const iconLoading = ref(false);
-    const models = ref([]);
+    const models = ref(['dcmh']);
     const curve = ref("1")
+    let itoption = reactive({})
     const enterIconLoading = () => {
       iconLoading.value = {
         delay: 100,
       };
-      console.log(models)
-    //   var models = { A: false, B: false, C: false, D: false };
-    //   for (var key in valuec.value) {
-    //     models[valuec.value[key]] = true;
-    //   }
-    //   console.log(models);
-    //   console.log(curve.value)
+
       postdata({
         A: 'test for api'
       }).then(res => {
-        console.log('back from api:')
-        console.log(res.data)
+
+        var postmodels = []
+        for (var key in models.value) {
+            postmodels.push(models.value[key]);
+        } 
+
+        let options = SetOption(postmodels, res.data)
+
+        itoption = options['it']
+        console.log(options['it'])
+        // itoption.legend = options['it'].legend
+        // itoption.series = options['it'].series
+        // itoption.title = options['it'].title
+        console.log(resoption)
+        console.log(toRaw(itoption))
       })
       setTimeout(() => {
         iconLoading.value = false;
@@ -141,6 +149,7 @@ export default defineComponent({
       enterIconLoading,
       usrname,
       resoption,
+      itoption
     };
   },
 });
