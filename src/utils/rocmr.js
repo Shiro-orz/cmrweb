@@ -7,5 +7,12 @@ export const postdata = (params) => api({
     baseURL: 'http://127.0.0.1:5000'
 })
 
+export const postfine = (params) => api({
+    url: '/postfine',
+    method: 'post',
+    data: params,
+    baseURL: 'http://127.0.0.1:5000'
+})
+
 
 // export const postdata = (params) => 

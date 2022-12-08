@@ -2,30 +2,22 @@
   <div :style="{ width: '100%', height: '100%' }">
     <div>
       <a-divider orientation="left">Choose Model</a-divider>
+      <a-checkbox-group v-model:value="models" style="width: 100%">
         <a-row>
-          <a-col :span="6">
-            <a-checkbox-group v-model:value="dcmhcheck">
-            <a-checkbox value="dcmh">dcmh</a-checkbox>
-            </a-checkbox-group>
-          </a-col>
-        <a-col :span="6">
-          <a-checkbox-group v-model:value="rocmrcheck">
-            <a-row>
-          <a-col :span="10">
-            <a-checkbox value="rocmr_v">rocmr_v</a-checkbox>
-          </a-col>
-          <a-col :span="10">
-            <a-checkbox value="rocmr_t">rocmr_t</a-checkbox>
+          <a-col :span="5">
+            <a-checkbox value="dcmh">DCMH</a-checkbox>
           </a-col>
           <a-col :span="4">
-            <a-checkbox value="rocmr_vt">rocmr_vt</a-checkbox>
+            <a-checkbox value="dcmh_v">DCMH+V</a-checkbox>
+          </a-col>
+          <a-col :span="4">
+            <a-checkbox value="dcmh_t">DCMH+T</a-checkbox>
+          </a-col>
+          <a-col :span="4">
+            <a-checkbox value="dcmh_vt">DCMH+VT</a-checkbox>
           </a-col>
         </a-row>
-        </a-checkbox-group>
-        </a-col>
-        
-        </a-row>
-      
+      </a-checkbox-group>
       <a-divider orientation="left">Choose Curve</a-divider>
       <a-radio-group
         v-model:value="curve"
@@ -33,13 +25,13 @@
         style="width: 100%"
       >
         <a-row>
-          <a-col :span="6">
-            <a-radio value="false">PR</a-radio>
+          <a-col :span="5">
+            <a-radio value="pr">PR</a-radio>
           </a-col>
           <a-col :span="5">
-            <a-radio value="true">Precision1000</a-radio>
+            <a-radio value="pr1000">Precision1000</a-radio>
           </a-col>
-          <a-col :span="8">
+          <a-col :span="10">
             <a-button
               type="primary"
               :loading="iconLoading"
@@ -78,9 +70,42 @@
 
 import { toRefs, defineComponent, reactive, ref, toRaw } from "vue";
 import EchartLine from "../../components/EchartLine.vue";
-import {postdata, postfine} from '../../utils/rocmr'
-import {SetOption, DefaultOption, tasks} from './fineOption'
+import {postdata} from '../../utils/rocmr'
+import {SetOption, DefaultOption, tasks} from './config'
 
+
+const resoption = reactive({
+  xAxis: {
+    type: "category",
+    data: [
+      "一月",
+      "二月",
+      "三月",
+      "四月",
+      "五月",
+      "六月",
+      "七月",
+      "八月",
+      "九月",
+      "十月",
+      "十一月",
+      "十二月",
+    ],
+  },
+  tooltip: {
+    trigger: "axis",
+  },
+  yAxis: {
+    type: "value",
+  },
+  series: [
+    {
+      data: [820, 932, 901, 934, 1290, 1330, 1320, 801, 102, 230, 4321, 4129],
+      type: "line",
+      smooth: true,
+    },
+  ],
+});
 
 function updateoption(src, tar){
     src.title.text = tar.title.text
@@ -97,9 +122,8 @@ export default defineComponent({
 
     const usrname = "shiro";
     const iconLoading = ref(false);
-    const curve = ref("false")
-    const dcmhcheck = ref(['dcmh'])
-    const rocmrcheck = ref([])
+    const models = ref(['dcmh']);
+    const curve = ref("pr")
     var postmodels = ['dcmh']
     var options
 
@@ -109,18 +133,16 @@ export default defineComponent({
     let ttoption = reactive(JSON.parse(JSON.stringify(DefaultOption)))
 
 function dopost(){
-    postfine({
-        thousand: curve.value,
-        methods: {
-            'dcmh': dcmhcheck.value,
-            'rocmr': rocmrcheck.value
-        }
+    postdata({
+        type: curve.value
       }).then(res => {
 
-        //console.log(res)
+        postmodels = []
+        for (var key in models.value) {
+            postmodels.push(models.value[key]);
+        } 
 
-        options = SetOption(res.data, 'dcmh')
-        //console.log(options)
+        options = SetOption(postmodels, res.data)
         updateoption(itoption, options['it'])
         updateoption(tioption, options['ti'])
         updateoption(iioption, options['ii'])
@@ -128,8 +150,9 @@ function dopost(){
         // itoption.title.text = options['it'].title.text
         // itoption.series = options['it'].series
         // itoption.legend.data = options['it'].legend.data
-        //console.log('check back ...')
-        //console.log(toRaw(itoption))
+        console.log('check back ...')
+        console.log(toRaw(itoption))
+        console.log(toRaw(resoption))
       })
 }
     dopost()
@@ -165,12 +188,12 @@ function dopost(){
       }, 1000);
     };
     return {
+      models,
       curve,
-      dcmhcheck,
-      rocmrcheck,
       iconLoading,
       enterIconLoading,
       usrname,
+      resoption,
       itoption,
       tioption,
       iioption,
