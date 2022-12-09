@@ -13,6 +13,8 @@
         </template>
         <a-menu-item key="1"><router-link to="/vsdcmh">Vs DCMH</router-link></a-menu-item>
         <a-menu-item key="2"><router-link to="/vsfine">Vs Finetune</router-link></a-menu-item>
+        <a-menu-item key="3"><router-link to="/vsdis">Vs Distillation</router-link></a-menu-item>
+        
       </a-sub-menu>
       <a-sub-menu key="sub2">
         <template #title>

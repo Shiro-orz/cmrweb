@@ -50,7 +50,7 @@ const colors = {
     rocmr_t: '#fac858',
     rocmr_vt: '#ee6666',
     finetune: '#91cc75',
-    dis: '',
+    distillation: '#91cc75',
 }
 
 
