@@ -109,8 +109,8 @@ function SetSingleOption(task, datas, page){
                 else if (modelname.includes('Finetune')){
                     color = colors['finetune']
                 }
-                else if (modelname.includes('dis')){
-                    color = colors['dis']
+                else if (modelname.includes('Dis')){
+                    color = colors['distillation']
                 }
             }
             if (datatype == 'norm') {
