@@ -57,6 +57,12 @@
         'MIM': [0.884, 0.884, 0.885]
       }
 
+      const DISdatas = {
+        'FGSM': 0.419,
+        'BIM': 0.418,
+        'MIM': 0.430
+      }
+
       const ATdatas = {
         'FGSM': [0.943, 0.843, 0.843],
         'BIM': [0.829, 0.928, 0.829],
@@ -95,22 +101,20 @@
             tooltip: {},
             dataset: {
               source: [
-                ['DefenseMethod', 'MAAE', 'AdvTraining'],
-                ['FGSM', MAAEdatas[advtype.value][0], ATdatas[advtype.value][0]],
-                ['BIM', MAAEdatas[advtype.value][1], ATdatas[advtype.value][1]],
-                ['MIM', MAAEdatas[advtype.value][2], ATdatas[advtype.value][2]],
+                ['DefenseMethod', 'MAAE', 'AdvTraining', 'Distillation'],
+                ['FGSM', MAAEdatas[advtype.value][0], ATdatas[advtype.value][0], DISdatas['FGSM']],
+                ['BIM', MAAEdatas[advtype.value][1], ATdatas[advtype.value][1], DISdatas['BIM']],
+                ['MIM', MAAEdatas[advtype.value][2], ATdatas[advtype.value][2], DISdatas['MIM']],
               ]
             },
             xAxis: { type: 'category' },
             yAxis: {},
             // Declare several bar series, each will be mapped
             // to a column of dataset.source by default.
-            series: [{ type: 'bar' }, { type: 'bar' }]
+            series: [{ type: 'bar' }, { type: 'bar' }, {type: 'bar'}]
           });
 
       onMounted(() => {
-
-       
             var atChDom = document.getElementById('attackEchart')
             var atChart = echarts.init(atChDom)
             atOption && atChart.setOption(atOption)    
