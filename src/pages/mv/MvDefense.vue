@@ -111,7 +111,15 @@
         series: [
           {
             data: [0.944, 0.369, 0.37, 0.382],
-            type: 'bar'
+            type: 'bar',
+            itemStyle:{
+              normal:{
+                label:{
+                  show: true,
+                  position: 'top'
+                }
+              }
+            }
           }
         ]
       }
