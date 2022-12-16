@@ -32,6 +32,32 @@
           <div :style="{width: '10%'}"></div>
         <div id="defEchart" :style="{width: '800px', height: '400px'}"></div>
         </a-row>
+        <a-row>
+        <div :style="{width: '5%'}"></div>
+        <div>FR score:  </div> 
+        <div :style="{width: '5%'}"></div>
+        <div>
+          <div>use FGSM samples</div>
+          <div>MAAE:  0.053/0.051/0.055</div>
+          <div>AdvTrain:  0.053/0.051/0.055</div>
+          <div>Dis:  0.525/0.526/0.430</div>
+        </div>
+        <div :style="{width: '5%'}"></div>
+        <div>
+          <div>use BIM samples</div>
+          <div>MAAE:  0.048/0.049/0.049</div>
+          <div>AdvTrain:  0.053/0.051/0.055</div>
+          <div>Dis:  0.525/0.526/0.430</div>
+        </div>
+        <div :style="{width: '5%'}"></div>
+        <div>
+          <div>use MIM samples</div>
+          <div>MAAE:  0.06/0.06/0.059</div>
+          <div>AdvTrain:  0.053/0.051/0.055</div>
+          <div>Dis:  0.525/0.526/0.430</div>
+        </div>
+
+        </a-row>
       </div>
      
     </div>
@@ -69,6 +95,7 @@
         'MIM': [0.823, 0.833, 0.934]
       }
 
+      const base = 0.944
       const atOption = {
           title:{
             text: 'Acc of MVCNN',
@@ -113,6 +140,7 @@
             // to a column of dataset.source by default.
             series: [{ type: 'bar' }, { type: 'bar' }, {type: 'bar'}]
           });
+      var maaefgsm = reactive((base - MAAEdatas[advtype.value][0]).toFixed(4)) 
 
       onMounted(() => {
             var atChDom = document.getElementById('attackEchart')
@@ -121,7 +149,7 @@
             var defChDom = document.getElementById('defEchart')
             var defChart = echarts.init(defChDom)
             defChart.clear()
-            defOption && defChart.setOption(defOption) 
+            defOption && defChart.setOption(defOption)             
             //     window.onresize = function () {
         //     myChart.resize()
         // }
@@ -140,6 +168,7 @@
                 defOption.dataset.source[1][1] = MAAEdatas[advtype.value][0]
                 defOption.dataset.source[2][1] = MAAEdatas[advtype.value][1]
                 defOption.dataset.source[3][1] = MAAEdatas[advtype.value][2]
+
                 if (defChart) {
                     defChart.setOption(defOption)
                 }
@@ -148,7 +177,7 @@
         )
       
       return {
-        advtype
+        advtype,
       }
 
     },
