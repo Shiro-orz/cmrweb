@@ -39,21 +39,21 @@
         <div>
           <div>use FGSM samples</div>
           <div>MAAE:  0.053/0.051/0.055</div>
-          <div>AdvTrain:  0.053/0.051/0.055</div>
+          <div>AdvTrain:  0.001/0.101/0.101</div>
           <div>Dis:  0.525/0.526/0.430</div>
         </div>
         <div :style="{width: '5%'}"></div>
         <div>
           <div>use BIM samples</div>
           <div>MAAE:  0.048/0.049/0.049</div>
-          <div>AdvTrain:  0.053/0.051/0.055</div>
+          <div>AdvTrain:  0.115/0.016/0.115</div>
           <div>Dis:  0.525/0.526/0.430</div>
         </div>
         <div :style="{width: '5%'}"></div>
         <div>
           <div>use MIM samples</div>
           <div>MAAE:  0.06/0.06/0.059</div>
-          <div>AdvTrain:  0.053/0.051/0.055</div>
+          <div>AdvTrain:  0.121/0.111/0.01</div>
           <div>Dis:  0.525/0.526/0.430</div>
         </div>
 
