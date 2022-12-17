@@ -59,22 +59,22 @@
         <div>
           <div>use FGSM samples</div>
           <div>MAAE:  0.053/0.051/0.055</div>
-          <div>AdvTrain:  0.001/0.101/0.101</div>
+          <div>AdvTrain:  0.059/0.06/0.045</div>
           <div>Dis:  0.525/0.526/0.430</div>
         </div>
         <div :style="{width: '5%'}"></div>
         <div>
           <div>use BIM samples</div>
           <div>MAAE:  0.048/0.049/0.049</div>
-          <div>AdvTrain:  0.06/0.016/0.061</div>
+          <div>AdvTrain:  0.06/0.058/0.061</div>
           <div>Dis:  0.525/0.526/0.430</div>
         </div>
         <div :style="{width: '5%'}"></div>
         <div>
           <div>use MIM samples</div>
           <div>MAAE:  0.06/0.06/0.059</div>
-          <div>AdvTrain:  0.121/0.111/0.01</div>
-          <div>Dis:  0.067/0.067/0.430</div>
+          <div>AdvTrain:  0.067/0.067/0.089</div>
+          <div>Dis:  0.525/0.526/0.430</div>
         </div>
 
         </a-row>
@@ -116,9 +116,9 @@
       // }
 
       const ATdatas = {
-        'FGSM': [0.943, 0.843, 0.843],
-        'BIM': [0.884, 0.928, 0.883],
-        'MIM': [0.877, 0.878, 0.934]
+        'FGSM': [0.885, 0.884, 0.899],
+        'BIM': [0.884, 0.886, 0.883],
+        'MIM': [0.878, 0.877, 0.855]
       }
 
       const base = 0.944
