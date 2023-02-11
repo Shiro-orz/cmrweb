@@ -26,6 +26,20 @@
         
         </a-row>
       
+      <a-divider orientation="left">Choose Attack Method</a-divider>
+      <a-radio-group
+        v-model:value="atmethod"
+        name="radioGroup"
+        style="width: 100%"
+      >
+        <a-row>
+          <a-col :span="6">
+            <a-radio value="pgd">PGD</a-radio>
+          </a-col>          
+        </a-row>
+      </a-radio-group> 
+
+
       <a-divider orientation="left">Choose Curve</a-divider>
       <a-radio-group
         v-model:value="curve"
@@ -50,6 +64,8 @@
           </a-col>
         </a-row>
       </a-radio-group>
+      
+       
     </div>
     <div>
       <a-divider orientation="left">Result</a-divider>
@@ -98,6 +114,7 @@ export default defineComponent({
     const usrname = "shiro";
     const iconLoading = ref(false);
     const curve = ref("false")
+    const atmethod = ref("pgd")
     const dcmhcheck = ref(['dcmh'])
     const rocmrcheck = ref([])
     var postmodels = ['dcmh']
@@ -166,6 +183,7 @@ function dopost(){
     };
     return {
       curve,
+      atmethod,
       dcmhcheck,
       rocmrcheck,
       iconLoading,
